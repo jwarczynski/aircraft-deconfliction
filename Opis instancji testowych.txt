@@ -1,0 +1,13 @@
+Dla każdej wielkości instancji (10, 20, 30 i 40 samolotów) macierz konfliktów została policzona zakładając 4 możliwe zmiany kierunku lotu (-20, -10, +10, +20 stopni) oraz 2 możliwe zmiany prędkości (-50, +50 jednostek). Wielkość macierzy konfliktów to zatem (liczba samolotów x (suma wszystkich manewrów + 1))^2.
+
+W plikach CM_RCP_n.txt znajduje się macierz konfliktów
+W plikach aircrafts_RCP_n.txt znajduje się opis kolumn/wierszy
+
+Macierz konfliktów jest zatem w formacie:
+
+                  samolot_1_manerw_1, samolot_2_manerw_1, ..., samolot_n-1_manewr_k, samolot_n_manewr_k
+samolot_1_manerw_1
+samolot_2_manerw_1
+...
+samolot_n-1_manewr_k
+samolot_n_manewr_k 
