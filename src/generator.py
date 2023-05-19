@@ -28,6 +28,7 @@ def generate_instances(*ranges):
 
 
 INSTANCES_RANGE = range(10)
+INSTANCES_RANGE_5 = range(5)
 
 # function of planes 
 PLANES_RANGE_P = range(10, 160, 10)
@@ -41,10 +42,23 @@ PLANES_RANGE_M = range(20, 21)
 DENSITY_RANGE_M = range(5, 6)
 CONFIG_M = (PLANES_RANGE_M, MANEUVERS_RANGE_M, MANEUVERS_RANGE_M, INSTANCES_RANGE)
 
+# function of maneuvers 2
+MANEUVERS_RANGE_M2 = range(10,160,10)
+PLANES_RANGE_M2 = range(20, 21)
+DENSITY_RANGE_M2 = range(25, 26)
+CONFIG_M2 = (PLANES_RANGE_M2, MANEUVERS_RANGE_M2, DENSITY_RANGE_M2, INSTANCES_RANGE)
+
+# function of maneuvers 3
+MANEUVERS_RANGE_M3 = range(50,60,1)
+PLANES_RANGE_M3 = range(10, 11)
+DENSITY_RANGE_M3 = range(59, 60)
+CONFIG_M3 = (PLANES_RANGE_M3, MANEUVERS_RANGE_M3, DENSITY_RANGE_M3, INSTANCES_RANGE_5)
+
 # function of density
 DENSITY_RANGE_D = range(15, 25, 1)
 PLANES_RANGE_D = range(20, 21)
 MANEUVERS_RANGE_D = range(10,11)
 CONFIG_D = (PLANES_RANGE_D, MANEUVERS_RANGE_D, DENSITY_RANGE_D, INSTANCES_RANGE)
 
-generate_instances(*CONFIG_D)
+if __name__ == "__main__":
+    generate_instances(*CONFIG_M3)

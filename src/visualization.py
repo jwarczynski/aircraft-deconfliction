@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 import pandas as pd
 from generator import DENSITY_RANGE_D
@@ -76,14 +77,24 @@ def show_planes_plot():
     show_plot(path, xlabel, title, sizes, col_index, True)
     
 
-def show_maneuvers_plot():
-    sizes = np.linspace(10, 150, 15)
+def show_maneuvers_plot(file):
+    ran =  file.split("_")[1]
+    print(ran)
+    s = int(ran.split("-")[0])
+    e = int(ran.split("-")[1])
+    if e-s > 20:
+        step = 10
+        sizes = np.linspace(s, e, int((e-s+10)/step))
+    else:
+        step = 1
+        sizes = np.linspace(s, e, int((e-s)/step))
     title = "czas rozwiązania w funkcji liczby dostępnych manewrów"
     xlabel = "liczba dopuszczalnych manewrów"
-    path = "maneuvers.csv"
+    path = f"maneuvers_{file}.csv"
+    file_path = os.path.join("..", "out", "basic", path)
     col_index = "liczba dopuszczalnych manewrów"
 
-    show_plot(path, xlabel, title, sizes, col_index, True)
+    show_plot(file_path, xlabel, title, sizes, col_index, True)
 
 def show_density_plot():
     sizes = np.linspace(10, 38, 15)

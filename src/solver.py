@@ -25,3 +25,7 @@ def deconflict(cm, planes_num, maneuvers):
     model.solve()
 
     return model, x
+
+
+if __name__ == "__main__":
+    pass
