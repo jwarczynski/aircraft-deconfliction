@@ -2,7 +2,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
-from generator import DENSITY_RANGE_D
+from pandas import display
 
 
 def plot_times_solutions(times, solutions, instances, xlabel, title, fit_poly=False):
