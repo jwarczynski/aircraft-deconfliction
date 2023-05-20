@@ -1,11 +1,17 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib
+import colorsys
 import os
 
 
-def get_df(filename):
-    path = os.path.join("..", "out", "extended", filename)
+def get_df(filename, optimize):
+    if optimize:
+        path = os.path.join("..", "out", "objective", filename)
+    else:
+        path = os.path.join("..", "out", "extended", filename)
     return pd.read_csv(path)
 
 
@@ -50,7 +56,7 @@ def get_avg_times_by_instance_and_status(df_solution_0, df_solution_1):
 
 
 def set_plot_description(ax, ind, width, xticks, xlabel, title):
-    ax.set_xticks(ind + width / 2)
+    # ax.set_xticks(ind + 1.5 * width)
     ax.set_xticklabels(xticks)
 
     if xlabel == "":
@@ -72,6 +78,8 @@ def show_bar_plot(mean_times_solution_0, mean_times_solution_1, xticks, xlabel, 
     rects1 = ax.bar(ind, mean_times_solution_0, width, label='Brak rozwiązania')
     rects2 = ax.bar(ind + width, mean_times_solution_1, width, label='Występowanie rozwiązania')
 
+    ax.set_xticks(ind + width / 2)
+
     set_plot_description(ax, ind, width, xticks, xlabel, title)    
     plt.show()
 
@@ -83,12 +91,51 @@ def getType(first_letter):
     if first_letter == "d":
         return 2
 
-def generate_bar_chart(filename, xlabel="", title=""):
-    df = get_df(filename)
+def generate_bar_chart(filename, optimize=False, xlabel="", title=""):
+    df = get_df(filename, optimize)
     add_mean_times(df)
     type = getType(filename[0])
     
     df_solution_0, df_solution_1 = fill_missing(df)
     mean_times_solution_0, mean_times_solution_1 = get_avg_times_by_instance_and_status(df_solution_0, df_solution_1)
     xticks = [x.split('_')[type] for x in df['InstancePrefix'].unique()]
+
     show_bar_plot(mean_times_solution_0, mean_times_solution_1, xticks, xlabel, title)
+
+def comparison_bar_chart(filename, xlabel="", title=""):
+    df = get_df(filename, False)
+    add_mean_times(df)
+
+    df_optimized = get_df(filename, True)
+    add_mean_times(df_optimized)
+
+    type = getType(filename[0])
+    
+    df_solution_0, df_solution_1 = fill_missing(df)
+    df_solution_opt_0, df_solution_opt_1 = fill_missing(df_optimized)
+
+    mean_times_solution_0, mean_times_solution_1 = get_avg_times_by_instance_and_status(df_solution_0, df_solution_1)
+    mean_times_solution_opt_0, mean_times_solution_opt_1 = get_avg_times_by_instance_and_status(df_solution_opt_0, df_solution_opt_1)
+    xticks = [x.split('_')[type] for x in df['InstancePrefix'].unique()]
+    show_comparison_bar_chart(mean_times_solution_0, mean_times_solution_1, mean_times_solution_opt_0, mean_times_solution_opt_1, xticks, xlabel, title)
+
+def show_comparison_bar_chart(y0, y1, y0_opt, y1_opt, xticks, xlabel, title=""):
+    fig, ax = plt.subplots(figsize=(10, 6))  # Zmiana rozmiaru wykresu
+    width = 0.20
+    ind = np.arange(len(y0))
+
+     # Wybór nazwanych kolorów
+    color1 = colors.CSS4_COLORS['darkred']
+    color2 = colors.CSS4_COLORS['salmon']
+    color3 = colors.CSS4_COLORS['teal']
+    color4 = colors.CSS4_COLORS['skyblue']
+
+    rects1 = ax.bar(ind, y0, width, label='Brak rozwiązania, brak f.celu', color=color1)
+    rects2 = ax.bar(ind + width, y1, width, label='Występowanie rozwiązania, brak f.celu', color=color2)
+    rects3 = ax.bar(ind + 2 * width, y0_opt, width, label='Brak rozwiązania, określona f celu', color=color3)
+    rects4 = ax.bar(ind + 3 * width, y1_opt, width, label='Występowanie rozwiązania, okreslona f. celu', color=color4)
+
+    ax.set_xticks(ind + 1.5 * width)
+
+    set_plot_description(ax, ind, width, xticks, xlabel, title)    
+    plt.show()

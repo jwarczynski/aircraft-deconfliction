@@ -1,7 +1,7 @@
 from docplex.mp.model import Model
 
 
-def deconflict(cm, planes_num, maneuvers):
+def deconflict(cm, planes_num, maneuvers, optimize=False):
     # Tworzenie modelu
     model = Model(name='Binary variables model')
 
@@ -20,6 +20,9 @@ def deconflict(cm, planes_num, maneuvers):
                 for l in range(0, maneuvers):
                     model.add_constraint(x[(i,j)]*cm[j][i][l][k] + x[(k,l)]*cm[j][i][l][k] <= 1)
                     
+    # Funkcja celu
+    if optimize:
+        model.minimize(model.sum(j * x[(i,j)] for i in range(0,planes_num) for j in range(0, maneuvers)))
 
     # Rozwiązanie problemu
     model.solve()

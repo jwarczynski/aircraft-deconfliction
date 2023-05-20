@@ -31,7 +31,7 @@ def read_matrix(filename):
     return colision_matrix, planes
 
 
-def get_average_times(p_range, m_range, f_range, i_range):
+def get_average_times(p_range, m_range, f_range, i_range, optimize=False):
     avg_times = []
     solutions_num = []
     for planes in p_range:
@@ -42,7 +42,7 @@ def get_average_times(p_range, m_range, f_range, i_range):
                 for instance in i_range:
                     # print(f'instance: {planes}_{maneuvers}_{filling}_{instance}')
                     cm, _ = read_matrix(f'{planes}_{maneuvers}_{filling}_{instance}')
-                    model, _ = deconflict(cm, planes, maneuvers)
+                    model, _ = deconflict(cm, planes, maneuvers, optimize)
                     total_config_time += model.solve_details.time
                     print(f'instance {planes}_{maneuvers}_{filling}_{instance}  time: {model.solve_details.time}    status: {model.solve_details.status}')
                     if model.solve_details.status in ["optimal", "feasible", "integer optimal solution"]:
@@ -54,7 +54,7 @@ def get_average_times(p_range, m_range, f_range, i_range):
     
     return (avg_times, solutions_num)
 
-def get_times_and_solutions(p_range, m_range, f_range, i_range):
+def get_times_and_solutions(p_range, m_range, f_range, i_range, optimize=False):
     times = []
     statuses = []
     solutions = []
@@ -67,7 +67,7 @@ def get_times_and_solutions(p_range, m_range, f_range, i_range):
                 sol_num = 0
                 for instance in i_range:
                     cm, _ = read_matrix(f'{planes}_{maneuvers}_{filling}_{instance}')
-                    model, _ = deconflict(cm, planes, maneuvers)
+                    model, _ = deconflict(cm, planes, maneuvers, optimize)
 
                     total_config_time += model.solve_details.time
                     
