@@ -142,13 +142,13 @@ def show_comparison_bar_chart(y0, y1, y0_opt, y1_opt, xticks, xlabel, title=""):
     plt.show()
 
 
-def avg_times_and_sols_num(filename):
+def avg_times_and_sols_num(filename, fit_poly=False):
     type = getType(filename[0])
 
     df = get_df(filename, False)
-    add_mean_times(df)
-
     df_optimized = get_df(filename, True)
+
+    add_mean_times(df)
     add_mean_times(df_optimized)
 
     df = df.drop_duplicates(subset=['InstancePrefix'])
@@ -156,15 +156,10 @@ def avg_times_and_sols_num(filename):
 
     mean_times = df['MeanTimeByStatus'].to_numpy()
     mean_times_opt = df_optimized['MeanTimeByStatus'].to_numpy()
-
     sols = df['SolutionsNum'].to_numpy()
-    sols_opt = df_optimized['SolutionsNum'].to_numpy()
-
+    
     xticks = np.array([int(x.split('_')[type]) for x in df['InstancePrefix'].unique()])
-    ind = np.arange(len(sols))
-
-
-    plot_times_solutions(mean_times, mean_times_opt, sols, xticks, "romiar instancji", "czas rozwiązania w funkcji wielkości instancji", fit_poly=False)
+    plot_times_solutions(mean_times, mean_times_opt, sols, xticks, "romiar instancji", "czas rozwiązania w funkcji wielkości instancji", fit_poly)
 
 
 def plot_times_solutions(mean_times, mean_times_opt, sols, instances, xlabel, title, fit_poly=False):

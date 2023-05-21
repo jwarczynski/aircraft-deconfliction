@@ -2,7 +2,9 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
-from pandas import display
+from IPython.display import display
+from matplotlib.ticker import MaxNLocator
+
 
 
 def plot_times_solutions(times, solutions, instances, xlabel, title, fit_poly=False):
@@ -13,10 +15,15 @@ def plot_times_solutions(times, solutions, instances, xlabel, title, fit_poly=Fa
     ax1.plot(instances, times, 'o-', color='tab:orange', alpha=0.5, label='Czas rozwiązania')
     ax1.tick_params(axis='y')
 
+
     ax2 = ax1.twinx()
     ax2.set_ylabel('Liczba rozwiązań')
     ax2.plot(instances, solutions, "s-", color='tab:blue', label='Liczba rozwiązań')
     ax2.tick_params(axis='y')
+    ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
+    min_value = 0  # Wartość minimalna na osi Y
+    max_value = max(solutions) if max(solutions) > 5 else 5
+    ax2.set_ylim(bottom=min_value, top=max_value)
 
     # Dopasowanie liniowe po zlogarytmowaniu wartości
     mask = times != 0
@@ -64,14 +71,14 @@ def show_plot(path, xlabel, title, x, col_index, fit_poly=False):
     plot_times_solutions(times, sol, x, xlabel, title, fit_poly)
 
     data = {col_index: x, 'Średni czas roziwązania': times, 'Liczba rozwiązań': sol}
-    show_table(data, col_index)
+    # show_table(data, col_index)
 
     
 def show_planes_plot():
     sizes = np.linspace(10, 150, 15)
     title = "czas rozwiązania w funkcji ilości statków powietrznych"
     xlabel = "ilość statków powietrznych"
-    path = "planes.csv"
+    path = "../out/basic/planes.csv"
     col_index = "ilość statków powietrznych "
 
     show_plot(path, xlabel, title, sizes, col_index, True)
@@ -79,7 +86,6 @@ def show_planes_plot():
 
 def show_maneuvers_plot(file):
     ran =  file.split("_")[1]
-    print(ran)
     s = int(ran.split("-")[0])
     e = int(ran.split("-")[1])
     if e-s > 20:
@@ -100,7 +106,7 @@ def show_density_plot():
     sizes = np.linspace(10, 38, 15)
     title = "czas rozwiązania w funkcji gęstości konfliktów"
     xlabel = "gęstość konfliktów w %"
-    path = "density.csv"
+    path = "../out/basic/density.csv"
     col_index = "procentowa gęstość konfliktów"
 
     show_plot(path, xlabel, title, sizes, col_index)
@@ -109,7 +115,7 @@ def show_density_plot2():
     sizes = np.arange(15, 25)
     title = "czas rozwiązania w funkcji gęstości konfliktów"
     xlabel = "gęstość konfliktów w %"
-    path = "density2.csv"
+    path = "../out/basic/density2.csv"
     col_index = "procentowa gęstość konfliktów"
 
     show_plot(path, xlabel, title, sizes, col_index)
